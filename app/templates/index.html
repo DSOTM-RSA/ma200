@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}Stock Portfolio Tracker - Home{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Track Your Stock Portfolio</h2>
+    </div>
+    <div class="card-body">
+        <p>Welcome to the MA200! This simple application helps you monitor your stocks and alerts you when they approach their 200-day moving average (MA).</p>
+        
+        <div class="center-buttons mt-3 mb-3">
+            {% if not request.cookies.get('access_token') %}
+                <a href="/auth/register" class="btn btn-success btn-large">Create Account</a>
+                <a href="/auth/login" class="btn btn-large">Login</a>
+            {% else %}
+                <a href="/portfolio" class="btn btn-success btn-large">View My Portfolio</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="card mt-3">
+    <div class="card-header">
+        <h2>How It Works</h2>
+    </div>
+    <div class="card-body">
+        <div class="how-it-works">
+            <div class="step">
+                <h3 class="step-number">1</h3>
+                <div class="step-content">
+                    <h3>Create an Account</h3>
+                    <p>Register with your email and a unique PIN (4 letters followed by 2 digits)</p>
+                </div>
+            </div>
+            
+            <div class="step">
+                <h3 class="step-number">2</h3>
+                <div class="step-content">
+                    <h3>Build Your Portfolio</h3>
+                    <p>Create a portfolio and add stocks using their ticker symbols. Set how often you want to check your stocks.</p>
+                </div>
+            </div>
+            
+            <div class="step">
+                <h3 class="step-number">3</h3>
+                <div class="step-content">
+                    <h3>Automatic Monitoring</h3>
+                    <p>Our system regularly checks your stocks against their 200-day MA</p>
+                </div>
+            </div>
+            
+            <div class="step">
+                <h3 class="step-number">4</h3>
+                <div class="step-content">
+                    <h3>Get Notified</h3>
+                    <p>When a stock approaches its 200-day MA, you'll receive an email notification</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-box mt-4">
+            <h3>What is the 200-day Moving Average?</h3>
+            <p>The 200-day moving average (MA) is a key technical indicator used by traders and investors to identify potential market trends and support/resistance levels. When a stock crosses its 200-day MA, it often signals a potential trend change.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block head %}
+<style>
+    /* Special styling for How It Works section */
+    .how-it-works {
+        margin: 2rem 0;
+    }
+    
+    .step {
+        display: flex;
+        margin-bottom: 2rem;
+        align-items: flex-start;
+    }
+    
+    .step-number {
+        background-color: var(--primary-color);
+        color: white;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.5rem;
+        margin-right: 1.5rem;
+        flex-shrink: 0;
+    }
+    
+    .step-content {
+        flex: 1;
+    }
+    
+    .step-content h3 {
+        margin-bottom: 0.5rem;
+        color: var(--dark-color);
+        font-size: 1.3rem;
+    }
+    
+    .step-content p {
+        font-size: 1.1rem;
+        line-height: 1.5;
+    }
+    
+    .info-box {
+        background-color: #e8f4fc;
+        border-left: 5px solid var(--primary-color);
+        padding: 1.5rem;
+        border-radius: 4px;
+    }
+    
+    .info-box h3 {
+        color: var(--primary-color);
+        margin-bottom: 0.75rem;
+    }
+    
+    .info-box p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+    
+    /* Make buttons on homepage larger */
+    .card-body .btn-large {
+        font-size: 1.1rem;
+        padding: 0.75rem 1.5rem;
+        min-width: 160px;
+    }
+</style>
+{% endblock %}

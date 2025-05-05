@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: stock-tracker-app
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - ./data:/app/data
+    environment:
+      - DATABASE_URL=sqlite:///./data/stock_tracker.db
+      # NotificationAPI settings
+      - NOTIFICATIONAPI_CLIENT_ID=${NOTIFICATIONAPI_CLIENT_ID}
+      - NOTIFICATIONAPI_CLIENT_SECRET=${NOTIFICATIONAPI_CLIENT_SECRET}
+      - NOTIFICATIONAPI_NOTIFICATION_ID=${NOTIFICATIONAPI_NOTIFICATION_ID}
+      - NOTIFICATIONAPI_ENDPOINT=${NOTIFICATIONAPI_ENDPOINT}
+      - ALPHA_VANTAGE_API_KEY=${ALPHA_VANTAGE_API_KEY}
+
+    restart: unless-stopped
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload

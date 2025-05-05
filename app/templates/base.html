@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}200-Week Moving Average{% endblock %}</title>
+    
+    <!-- HTMX for interactive UI without JavaScript -->
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    
+    <!-- Optional: Hyperscript for additional interactivity -->
+    <script src="https://unpkg.com/hyperscript.org@0.9.8"></script>
+    
+    <!-- Link to our CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}">
+    
+    <!-- Any additional head content -->
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>MA200: The Only Wave You Need to Ride</h1>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    {% if request.cookies.get('access_token') %}
+                        <li><a href="/portfolio">My Portfolio</a></li>
+                        <li><a href="/auth/logout">Logout</a></li>
+                    {% else %}
+                        <li><a href="/auth/login">Login</a></li>
+                        <li><a href="/auth/register">Register</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <footer class="container mt-3 mb-3">
+        <hr>
+        <p class="text-center">© MA200: The Only Wave You Need to Ride</p>
+    </footer>
+    
+    <!-- Link to our JavaScript -->
+    <script src="{{ url_for('static', path='/js/app.js') }}"></script>
+    
+    <!-- Any additional scripts -->
+    {% block scripts %}{% endblock %}
+</body>
+</html>

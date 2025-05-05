@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block title %}My Portfolio - Stock Portfolio Tracker{% endblock %}
+
+{% block content %}
+<div class="flex justify-between align-center mb-3">
+    <h2>My Portfolio</h2>
+    <button class="btn" 
+            hx-get="/portfolio" 
+            hx-target="main" 
+            hx-indicator="#refresh-indicator">
+        <span id="refresh-indicator" class="htmx-indicator">⟳</span> Refresh
+    </button>
+</div>
+
+{% if error %}
+    <div class="alert alert-danger">
+        {{ error }}
+    </div>
+{% endif %}
+
+{% if success %}
+    <div class="alert alert-success">
+        {{ success }}
+    </div>
+{% endif %}
+
+{% if not has_portfolio %}
+    <!-- Create Portfolio Form - Only shown when user doesn't have a portfolio -->
+    <div class="card mb-3">
+        <div class="card-header">
+            <h3>Create Your Portfolio</h3>
+        </div>
+        <div class="card-body">
+            <form action="/portfolio/create" method="post">
+                <div class="form-group">
+                    <label for="name">Portfolio Name</label>
+                    <input type="text" id="name" name="name" class="form-control" required
+                           placeholder="My Growth Stocks">
+                </div>
+                
+                <div class="form-group">
+                    <label for="polling_rate">Polling Rate (hours)</label>
+                    <input type="number" id="polling_rate" name="polling_rate" class="form-control" 
+                           value="24" min="1" max="168" required>
+                    <small class="form-text text-muted">How often we should check your stocks (in hours)</small>
+                </div>
+                
+                <div class="center-buttons">
+                    <button type="submit" class="btn btn-success">Create Portfolio</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% else %}
+    <!-- Existing Portfolio -->
+    <div class="card mb-3" id="portfolio-{{ portfolio.id }}">
+        <div class="card-header">
+            <div class="flex justify-between align-center">
+                <h3>{{ portfolio.name }}</h3>
+                <div class="btn-group">
+                    <span class="badge badge-primary">Checked every {{ portfolio.polling_rate }} hours</span>
+                    <a href="/portfolio/{{ portfolio.id }}/refresh" class="btn btn-small">
+                        Check Porfolio Now
+                    </a>
+                    <a href="/portfolio/{{ portfolio.id }}/check-alerts" class="btn btn-small" 
+                        title="Check stocks for alerts now">
+                            Test Alerts
+                    </a>
+                    <a href="/portfolio/{{ portfolio.id }}/test-notification" class="btn btn-small" 
+                       title="Send a test notification to your email">
+                        Test Notification 
+                    </a>
+                    <form action="/portfolio/{{ portfolio.id }}/delete" method="post" 
+                          onsubmit="return confirm('Are you sure you want to delete this portfolio?');">
+                        <button type="submit" class="btn btn-small btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card-body">
+            <!-- Add Stock Form -->
+            <div class="mb-3">
+                <form action="/portfolio/{{ portfolio.id }}/add-stock" method="post"
+                      hx-post="/portfolio/{{ portfolio.id }}/add-stock"
+                      hx-swap="outerHTML"
+                      hx-target="#portfolio-{{ portfolio.id }}">
+                    <div class="flex">
+                        <div class="form-group" style="flex: 1; margin-right: 10px; margin-bottom: 0;">
+                            <input type="text" name="symbol" class="form-control" 
+                                   placeholder="Stock Symbol (e.g., AAPL)" 
+                                   required>
+                        </div>
+                        <button type="submit" class="btn">Add Stock</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Stocks Table -->
+            {% if portfolio.stocks %}
+                <!-- In portfolio.html, update the stocks table -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Last Price</th>
+                        <th>200-day MA</th>
+                        <th>Distance to MA</th>
+                        <th>Days at/below MA</th>
+                        <th>Status</th>
+                        <th class="actions">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stock in portfolio.stocks %}
+                        <tr>
+                            <td>{{ stock.symbol }}</td>
+                            <td>${{ "%.2f"|format(stock.last_price or 0) }}</td>
+                            <td>${{ "%.2f"|format(stock.ma_200 or 0) }}</td>
+                            <td>
+                                {% if stock.distance_to_ma %}
+                                    {{ "%.2f"|format(stock.distance_to_ma) }}%
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if stock.days_since_ma_break is not none %}
+                                    {{ stock.days_since_ma_break }} days
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if stock.distance_to_ma is not none %}
+                                    {% if stock.distance_to_ma <= 0 and stock.distance_to_ma >= -15.0 %}
+                                        <span class="badge badge-warning">At/Below MA</span>
+                                    {% elif stock.distance_to_ma > 0 %}
+                                        <span class="badge badge-success">Above MA</span>
+                                    {% else %}
+                                        <span class="badge badge-danger">Far Below MA</span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="badge badge-primary">Pending</span>
+                                {% endif %}
+                            </td>
+                            <td class="actions">
+                                <form action="/portfolio/{{ portfolio.id }}/remove-stock/{{ stock.id }}" 
+                                    method="post"
+                                    onsubmit="return confirm('Remove {{ stock.symbol }} from portfolio?');">
+                                    <button type="submit" class="btn btn-small btn-danger">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+                <div class="alert alert-primary">
+                    <p>No stocks added yet. Add your first stock above.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

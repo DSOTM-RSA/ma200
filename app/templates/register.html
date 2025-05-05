@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Stock Portfolio Tracker{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Create an Account</h2>
+    </div>
+    <div class="card-body">
+        {% if error %}
+            <div class="alert alert-danger">
+                {{ error }}
+            </div>
+        {% endif %}
+        
+        <form action="/auth/register" method="post">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" class="form-control" required
+                       placeholder="you@example.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="pin">PIN (4 letters followed by 2 digits)</label>
+                <input type="text" id="pin" name="pin" class="form-control" required
+                       placeholder="ABCD12" maxlength="6" pattern="[A-Za-z]{4}[0-9]{2}">
+                <small id="pin-error" class="text-danger" style="display: none;">PIN must be 4 letters followed by 2 digits</small>
+                <small class="form-text text-muted">This PIN will be used to login to your account. Example: ABCD12</small>
+            </div>
+            
+            <div class="center-buttons">
+                <button type="submit" class="btn btn-success">Create Account</button>
+            </div>
+        </form>
+        
+        <div class="mt-3 text-center">
+            <p>Already have an account? <a href="/auth/login">Login</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

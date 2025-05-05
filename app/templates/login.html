@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Stock Portfolio Tracker{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Login to Your Account</h2>
+    </div>
+    <div class="card-body">
+        {% if error %}
+            <div class="alert alert-danger">
+                {{ error }}
+            </div>
+        {% endif %}
+        
+        <form action="/auth/login" method="post">
+            <div class="form-group">
+                <label for="pin">Your 6-character PIN</label>
+                <input type="text" id="pin" name="pin" class="form-control" required
+                       placeholder="ABCD12" maxlength="6" pattern="[A-Za-z]{4}[0-9]{2}"
+                       _="on keyup
+                          if my value.length == 6
+                            if not my value.match('^[A-Za-z]{4}[0-9]{2}$')
+                              add .border-danger to me
+                              set #pin-error.innerText to 'PIN must be 4 letters followed by 2 digits'
+                              show #pin-error
+                            else
+                              remove .border-danger from me
+                              hide #pin-error
+                          end">
+                <small id="pin-error" class="text-danger" style="display: none;"></small>
+                <small class="form-text text-muted">Enter your 4 letters followed by 2 digits PIN</small>
+            </div>
+            
+            <div class="center-buttons">
+                <button type="submit" class="btn btn-primary">Login</button>
+            </div>
+        </form>
+        
+        <div class="mt-3 text-center">
+            <p>Don't have an account? <a href="/auth/register">Register</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

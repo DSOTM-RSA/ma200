@@ -1,0 +1,38 @@
+# Core Framework
+fastapi>=0.104.1
+uvicorn>=0.24.0
+python-multipart>=0.0.6  # For form data processing
+
+# Database
+sqlmodel>=0.0.8
+sqlalchemy>=2.0.23
+alembic>=1.12.1  # For database migrations
+aiosqlite>=0.19.0  # For async SQLite support
+
+# Templates
+jinja2>=3.1.2
+python-jose>=3.3.0  # For JWT tokens
+passlib>=1.7.4  # For password hashing
+bcrypt>=4.0.1  # For password hashing
+
+# Security
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+python-dotenv>=1.0.0  # For environment variables
+
+# HTTP client for stock API
+httpx>=0.25.1  # Asynchronous HTTP client
+
+# Scheduler for background jobs
+APScheduler>=3.10.4
+
+# Notification API
+notificationapi_python_server_sdk>=0.2.10
+
+# Development & Testing
+pytest>=7.4.3
+pytest-asyncio>=0.21.1
+
+# Production
+gunicorn>=21.2.0  # For production server
+uvicorn[standard]>=0.24.0  # For production-ready ASGI server
