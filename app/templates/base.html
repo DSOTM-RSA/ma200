@@ -5,14 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}200-Week Moving Average{% endblock %}</title>
     
-    <!-- HTMX for interactive UI without JavaScript -->
+    <!-- Use protocol-relative URLs for external resources -->
     <script src="https://unpkg.com/htmx.org@1.9.2"></script>
-    
-    <!-- Optional: Hyperscript for additional interactivity -->
     <script src="https://unpkg.com/hyperscript.org@0.9.8"></script>
     
-    <!-- Link to our CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}">
+    <!-- Use absolute path for stylesheet -->
+    <link rel="stylesheet" href="/static/css/styles.css">
     
     <!-- Any additional head content -->
     {% block head %}{% endblock %}
@@ -45,8 +43,8 @@
         <p class="text-center">© MA200: The Only Wave You Need to Ride</p>
     </footer>
     
-    <!-- Link to our JavaScript -->
-    <script src="{{ url_for('static', path='/js/app.js') }}"></script>
+    <!-- Use absolute path for JavaScript -->
+    <script src="/static/js/app.js"></script>
     
     <!-- Any additional scripts -->
     {% block scripts %}{% endblock %}

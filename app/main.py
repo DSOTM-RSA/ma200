@@ -12,7 +12,6 @@ import logging
 
 from app.models.models import create_db_and_tables, get_engine, User, Portfolio, Stock
 from app.services.stock_service import StockService
-from app.services.notification_service import NotificationService
 from app.routes import auth, portfolio
 
 # Set up logging
@@ -52,7 +51,10 @@ async def lifespan(app: FastAPI):
     scheduler.shutdown()
 
 # Create FastAPI app
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    lifespan=lifespan,
+    redirect_slashes=False  # Prevent redirect loops with trailing slashes
+)
 
 # Set up static files and templates
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
@@ -88,4 +90,9 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run(
+        "app.main:app", 
+        host="0.0.0.0", 
+        port=80, 
+        reload=True
+    )

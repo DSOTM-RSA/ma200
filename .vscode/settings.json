@@ -1,0 +1,14 @@
+{
+    "containerApps.deploymentConfigurations": [
+        {
+            "label": "stock-portfolio-monitoring-app",
+            "type": "AcrDockerBuildRequest",
+            "dockerfilePath": "Dockerfile",
+            "srcPath": ".",
+            "envPath": ".env",
+            "resourceGroup": "side-projects",
+            "containerApp": "stock-portfolio-monitoring-app",
+            "containerRegistry": "explorations"
+        }
+    ]
+}
